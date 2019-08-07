@@ -10,7 +10,7 @@ pip install tuliptask
 - Create a tulip task file: `tulipfile.py`
 - Add a simple task
 ```python
-from tulip import TulipTask
+from tuliptask import TulipTask
 
 @TulipTask.task("dev") # use decorator to define a task
 class Dev:
@@ -26,7 +26,7 @@ tulip dev
 
 ## add arguments to the task
 ```python
-from tulip import TulipTask
+from tuliptask import TulipTask
 
 @TulipTask.task("dev")
 class Dev:
@@ -56,8 +56,8 @@ available command shortcuts:
 Tuliptask provides several base tasks for convenience.
 
 ```python
-from tulip import TulipTask
-from tulip.tasks import KubeTask
+from tuliptask import TulipTask
+from tuliptask.tasks import KubeTask
 
 @TulipTask.task("dev")
 class Dev(KubeTask):
@@ -82,7 +82,7 @@ base task will add base `setup()`, `run()` and other convenient functions.
 ## multi-run
 When we have multiple tasks or services that do not depend on each other, it's waste of time to run them in serial. For example, if you need to build backend and frontend images, they can be run in parallel to speed up the process.
 ```python
-from tulip import TulipTask, MultiRun, proc
+from tuliptask import TulipTask, MultiRun, proc
 
 @TulipTask.task("dev")
 class Dev:
