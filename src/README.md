@@ -52,8 +52,45 @@ available command shortcuts:
 - `proc.k()` = `proc.run("kubectl")`
 - `proc.mk()` = `proc.run("minikube")`
 
+## run task before/after another task
+```python
+@TulipTask.task("init")
+class Init:
+    def run(self, args):
+        print("initializing...")
+
+@TulipTask.task("cleanup")
+class CleanUp:
+    def run(self, args):
+        print("cleaning up...")
+
+@TulipTask.task("dev", pre=["init"], post=["cleanup"])
+class Dev:
+    def run(self, args):
+        print("doing some dev task")
+```
+
+## run a task directly by passing in args
+```python
+from tulip import TulipTask, proc
+
+@TulipTask.task("django_manage")
+class DjangoManage:
+    def setup(self, parser):
+        parser.add_argument("--cmd")
+    
+    def run(self, args):
+        proc.dc(f"run python3 ./manage.py {args.cmd}")
+
+@TulipTask.task("migrate")
+class Migrate:
+    def run(self, args):
+        TulipTask.run_task("django_manage", cmd="migrate") # pass in --cmd args to 'django_manage' task
+```
+
 ## extend base task
-Tuliptask provides several base tasks for convenience.
+Tuliptask provides several base tasks for convenience.  
+base task will add base `setup()`, `run()` and other convenient functions.
 
 ```python
 from tuliptask import TulipTask
@@ -70,7 +107,6 @@ class Dev(KubeTask):
 
 TulipTask.start()
 ```
-base task will add base `setup()`, `run()` and other convenient functions.
 
 ### KubeTask
 - `setup(parser)`:
@@ -95,4 +131,19 @@ class Dev:
 TulipTask.start()
 ```
 
-## WIP
+## Utilities
+### tulip.utils.GitUtil
+  - `git_ts()`: get timestamp of current branch.
+  - `git_hash()`: get hash of current branch.
+
+### tulip.utils.TextUtil
+  - `colored_text(str, color)`: add color to string, default color is 33. [more info](https://misc.flogisoft.com/bash/tip_colors_and_formatting).
+  - `eval_file(file_path, vars_dict)`: replace placeholder (in ${} format) in a file with a dict.
+    ```yaml
+    # test.yaml
+    data:
+        name: ${dataname}
+    ```
+    ```python
+    eval_file("test.yaml", {"dataname": "real name"})
+    ```
