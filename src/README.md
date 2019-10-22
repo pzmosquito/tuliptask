@@ -42,9 +42,9 @@ TulipTask.start()
 ## run shell command
 ```python
 def run(self, args):
-    tulip.proc.run("docker build")
+    tuliptask.proc.run("docker build")
     # or use docker command shortcut
-    tulip.proc.d("build")
+    tuliptask.proc.d("build")
 ```
 available command shortcuts:
 - `proc.d()` = `proc.run("docker")`
@@ -132,11 +132,11 @@ TulipTask.start()
 ```
 
 ## Utilities
-### tulip.utils.GitUtil
+### tuliptask.utils.GitUtil
   - `git_ts()`: get timestamp of current branch.
   - `git_hash()`: get hash of current branch.
 
-### tulip.utils.TextUtil
+### tuliptask.utils.TextUtil
   - `colored_text(str, color)`: add color to string, default color is 33. [more info](https://misc.flogisoft.com/bash/tip_colors_and_formatting).
   - `eval_file(file_path, vars_dict)`: replace placeholder (in ${} format) in a file with a dict.
     ```yaml
